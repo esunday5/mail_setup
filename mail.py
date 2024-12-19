@@ -22,6 +22,7 @@ def send_email():
     # Get branch name from POST request
     data = request.get_json()  # Assumes the client sends JSON data
     branch_name = data.get("branch_name", "Unknown Branch")  # Default to "Unknown Branch" if missing
+    request_type = data.get ("request_type", "Unknown Type")
     department = data.get("department", "Unknown Department")
     payee_name = data.get("payee_name", "Unknown Payee")
     payee_account = data.get("payee_account", "Unknown Account")
@@ -47,8 +48,8 @@ def send_email():
             </div>
             <p style="font-size: 22px; font-weight: bold; color: #388e3c; text-align: center;">You have a new request for {branch_name}!</p>
 
-            <div style="padding: 10px; font-size: 14px; color: #333;">
-                <p style="font-size: 16px; font-weight: bold; color: #388e3c;">Cash Advance Request Details</p>
+            <div style="padding: 20px; font-size: 14px; text-align: center;">
+                <p><strong>Request Type:</strong> {request_type}</p>
                 <p><strong>Department:</strong> {department}</p>
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
@@ -64,7 +65,8 @@ def send_email():
                     <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
                 </div>
             </div>
-            <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777;">
+            <!-- Footer -->
+            <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777; position: absolute-bottom;">
                 <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
             </footer>
         </div>
