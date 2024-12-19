@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify  # Import jsonify for JSON responses
 from flask_mail import Mail, Message
 import logging
@@ -8,8 +9,8 @@ app = Flask(__name__)
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'emmanatesynergy@gmail.com'
-app.config['MAIL_PASSWORD'] = 'mrfl owrh pyoq hflx'
+app.config['MAIL_USERNAME'] = 'emmanatesynergy@gmail.com'  # Your Gmail email
+app.config['MAIL_PASSWORD'] = 'mrfl owrh pyoq hflx'  # App password if 2FA enabled
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_TIMEOUT'] = 10
@@ -20,7 +21,8 @@ mail = Mail(app)
 def send_html_email():
     msg = Message(subject='HTML Email from Flask',
             sender="emmanatesynergy@gmail.com",
-            recipients=["henry.etim@ekondomfbank.com"])
+            recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]
+            )
 
     # HTML body content
     msg.html = """
