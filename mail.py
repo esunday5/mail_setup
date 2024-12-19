@@ -40,14 +40,15 @@ def send_email():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Email Notification</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #337036; color: #ffffff;">
+    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
         <div style="max-width: 600px; margin: auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden;">
-            <div style="background-color: #a8e6cf; padding: 20px; text-align: center;">
+            <div style="background-color: #37a04e; padding: 20px; text-align: center;">
                 <img src="https://ibank.mybankone.com/tenants/101/img/logo.png" alt="Logo" style="max-width: 150px;">
             </div>
-            <div style="padding: 20px; text-align: center;">
-                <p style="font-size: 14px; line-height: 1.6; color: #333;">Cash Advance</p>
-                <p style="font-size: 22px; font-weight: bold; color: #388e3c;">You have a new request for {branch_name}!</p>
+            <p style="font-size: 22px; font-weight: bold; color: #388e3c; text-align: center;">You have a new request for {branch_name}!</p>
+
+            <div style="padding: 10px; font-size: 14px; color: #333;">
+                <p style="font-size: 16px; font-weight: bold; color: #388e3c;">Cash Advance Request Details</p>
                 <p><strong>Department:</strong> {department}</p>
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
@@ -56,6 +57,12 @@ def send_email():
                 <p><strong>Narration:</strong> {narration}</p>
                 <p><strong>Less What:</strong> {less_what}</p>
                 <p><strong>Amount:</strong> {amount}</p>
+            </div>
+
+
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
+                </div>
             </div>
             <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777;">
                 <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
