@@ -19,7 +19,7 @@ mail = Mail(app)
 
 @app.route("/")
 def send_html_email():
-    msg = Message(subject='HTML Email from Flask',
+    msg = Message(subject='You have a new request',
             sender="emmanatesynergy@gmail.com",
             recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]
             )
@@ -101,7 +101,7 @@ def send_html_email():
 
     mail.send(msg)
 
-    return "HTML email sent!"
+    return "Email Sent Successfully"
 
 if __name__ == '__main__':
     app.run(debug=True)
