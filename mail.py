@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify  # Import jsonify for JSON responses
+from flask import Flask, jsonify, request  # Import jsonify for JSON responses
 from flask_mail import Mail, Message
 import logging
 from logging import StreamHandler
@@ -17,91 +17,72 @@ app.config['MAIL_TIMEOUT'] = 10
 
 mail = Mail(app)
 
-@app.route("/")
-def send_html_email():
-    msg = Message(subject='You Have a New Request!',
-            sender="emmanatesynergy@gmail.com",
-            recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]
-            )
+@app.route("/", methods=["POST"])
+def send_email():
+    # Get branch name from POST request
+    data = request.get_json()  # Assumes the client sends JSON data
+    branch_name = data.get("branch_name", "Unknown Branch")  # Default to "Unknown Branch" if missing
+    department = data.get("department", "Unknown Department")
+    payee_name = data.get("payee_name", "Unknown Payee")
+    payee_account = data.get("payee_account", "Unknown Account")
+    invoice_amount = data.get("invoice_amount", "N/A")
+    cash_advance = data.get("cash_advance", "N/A")
+    narration = data.get("narration", "N/A")
+    less_what = data.get("less_what", "N/A")
+    amount = data.get("amount", "N/A")
 
-    # HTML body content
-    msg.html = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Notification</title>
-</head>
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
-
-    <!-- Email Container -->
-    <div style="max-width: 600px; margin: auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden;">
-
-        <!-- Header Section -->
-        <div style="background-color: #37a04e; padding: 20px; text-align: center;">
-            <img src="https://ibank.mybankone.com/tenants/101/img/logo.png" alt="Logo" style="max-width: 150px;">
-        </div>
-
-        <!-- Warning Section -->
-        <div style="padding: 20px; text-align: center;">
-            <p style="font-size: 22px; font-weight: bold; color: #388e3c;">You have a new request for {Branch Name}!</p>
-        </div>
-
-        <!-- Subheading -->
-        <p style="margin: 0 20px; font-size: 16px; text-align: center; color: #555;">From (staff name and position)</p>
-
-        <!-- Email Body -->
-        <div style="padding: 20px; text-align: center;">
-            <p style="font-size: 14px; line-height: 1.6; color: #333;">{"Request Details"}</p>
-            <p style="font-size: 14px; line-height: 1.6; color: #333;">{"Request Type"}</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam tempora perspiciatis molestias velit, recusandae, eligendi, aspernatur excepturi nam hic cumque nulla non saepe ducimus impedit soluta dolores maxime? Consequuntur, nam!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam tempora perspiciatis molestias velit, recusandae, eligendi, aspernatur excepturi nam hic cumque nulla non saepe ducimus impedit soluta dolores maxime? Consequuntur, nam!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam tempora perspiciatis molestias velit, recusandae, eligendi, aspernatur excepturi nam hic cumque nulla non saepe ducimus impedit soluta dolores maxime? Consequuntur, nam!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam tempora perspiciatis molestias velit, recusandae, eligendi, aspernatur excepturi nam hic cumque nulla non saepe ducimus impedit soluta dolores maxime? Consequuntur, nam!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam tempora perspiciatis molestias velit, recusandae, eligendi, aspernatur excepturi nam hic cumque nulla non saepe ducimus impedit soluta dolores maxime? Consequuntur, nam!</p>
-
-            
-            
-            
-            
-            <div style="text-align: center; margin: 20px 0;">
-                <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
+    # Define the HTML content with dynamic branch name
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Email Notification</title>
+    </head>
+    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
+        <div style="max-width: 600px; margin: auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden;">
+            <div style="background-color: #a8e6cf; padding: 20px; text-align: center;">
+                <img src="https://ibank.mybankone.com/tenants/101/img/logo.png" alt="Logo" style="max-width: 150px;">
             </div>
-        </div>
-
-        <!-- Spacer -->
-        <div style="padding: 20px 0; text-align: center;">
-            <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 0 20px;">
-        </div>
-
-        <!-- Footer -->
-        <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777; position: absolute-bottom;">
-            <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
-            <div style="margin: 10px 0;">
-                <a href="https://www.facebook.com/ekondomfb/about" target="_blank" style="text-decoration: none; margin: 0 5px;">
-                    <img src="https://via.placeholder.com/24?text=FB" alt="Facebook" style="width: 24px; height: 24px;">
-                </a>
-                <a href="https://x.com/ekondomfb" target="_blank" style="text-decoration: none; margin: 0 5px;">
-                    <img src="https://via.placeholder.com/24?text=X" alt="Twitter" style="width: 24px; height: 24px;">
-                </a>
-                <a href="https://www.linkedin.com/in/ekondo-bank-40a666155" target="_blank" style="text-decoration: none; margin: 0 5px;">
-                    <img src="https://via.placeholder.com/24?text=LI" alt="LinkedIn" style="width: 24px; height: 24px;">
-                </a>
-                <a href="https://www.instagram.com/ekondomfb" target="_blank" style="text-decoration: none; margin: 0 5px;">
-                    <img src="https://via.placeholder.com/24?text=IG" alt="Instagram" style="width: 24px; height: 24px;">
-                </a>
+            <div style="padding: 20px; text-align: center;">
+                <p style="font-size: 22px; font-weight: bold; color: #388e3c;">You have a new request for {branch_name}!</p>
+                <p><strong>Department:</strong> {department}</p>
+                <p><strong>Payee Name:</strong> {payee_name}</p>
+                <p><strong>Payee Account:</strong> {payee_account}</p>
+                <p><strong>Invoice Amount:</strong> {invoice_amount}</p>
+                <p><strong>Cash Advance:</strong> {cash_advance}</p>
+                <p><strong>Narration:</strong> {narration}</p>
+                <p><strong>Less What:</strong> {less_what}</p>
+                <p><strong>Amount:</strong> {amount}</p>
             </div>
-        </footer>
-    </div>
-
-</body>
-</html>
+            <p style="margin: 0 20px; font-size: 16px; text-align: center; color: #555;">From (staff name and position)</p>
+            <div style="padding: 20px;">
+                <p style="font-size: 14px; line-height: 1.6; color: #333;">{"Request Details"}</p>
+                <p style="font-size: 14px; line-height: 1.6; color: #333;">{"Request Type"}</p>
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="#" style="text-decoration: none; background-color: #81c784; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
+                </div>
+            </div>
+            <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777;">
+                <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
+            </footer>
+        </div>
+    </body>
+    </html>
     """
 
+    # Create the email
+    msg = Message(
+        subject="New Request Notification",
+            sender="emmanatesynergy@gmail.com",
+            recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]  # Replace with actual recipient
+    )
+    msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
+    msg.html = html_content  # HTML content
     mail.send(msg)
 
-    return "Email Sent Successfully!"
+    return {"message": "Email sent successfully!"}, 200
 
 if __name__ == '__main__':
     app.run(debug=True)
