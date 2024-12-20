@@ -1,50 +1,29 @@
 import os
-from flask import Flask, jsonify, request  # Import jsonify for JSON responses
-from flask_mail import Mail, Message
-import logging
-from logging import StreamHandler
-from flask import Blueprint
+from flask import Blueprint, request
+from flask_mail import Message
+from mail import mail  # Import mail from mail.py
 
-app = Flask(__name__)
+opexcapexretirement_blueprint = Blueprint('opexcapexretirement', __name__)
 
-# Mail configuration
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'emmanatesynergy@gmail.com'  # Your Gmail email
-app.config['MAIL_PASSWORD'] = 'mrfl owrh pyoq hflx'  # App password if 2FA enabled
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_TIMEOUT'] = 10
-
-mail = Mail(app)
-
-# Register Petty Cash Advance Blueprint
-from pettycashadvance import pettycashadvance_blueprint
-from pettycashretirement import pettycashretirement_blueprint
-from opexcapexretirement import opexcapexretirement_blueprint
-from stationeryrequest import stationeryrequest_blueprint
-app.register_blueprint(pettycashadvance_blueprint)
-app.register_blueprint(pettycashretirement_blueprint)
-app.register_blueprint(opexcapexretirement_blueprint)
-app.register_blueprint(stationeryrequest_blueprint)
-
-
-@app.route("/cashadvance", methods=["POST"])
+# OPEX/CAPEX Retirement route
+@opexcapexretirement_blueprint.route("/opexcapexretirement", methods=["POST"])
 def send_email():
-    # Get branch name from POST request
-    data = request.get_json()  # Assumes the client sends JSON data
-    branch_name = data.get("branch_name", "Unknown Branch")  # Default to "Unknown Branch" if missing
-    request_type = data.get ("request_type", "Unknown Type")
+    data = request.get_json()
+
+    # Get values from the request body
+    branch_name = data.get("branch_name", "Unknown Branch")
+    request_type = data.get("request_type", "Unknown Type")
     department = data.get("department", "Unknown Department")
     payee_name = data.get("payee_name", "Unknown Payee")
     payee_account = data.get("payee_account", "Unknown Account")
     invoice_amount = data.get("invoice_amount", "N/A")
     cash_advance = data.get("cash_advance", "N/A")
     narration = data.get("narration", "N/A")
+    refund_reimbursement = data.get("refund_reimbursement", "N/A")
     less_what = data.get("less_what", "N/A")
     amount = data.get("amount", "N/A")
 
-    # Define the HTML content with dynamic branch name
+    # HTML content for the email
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -68,36 +47,31 @@ def send_email():
                 <p><strong>Invoice Amount:</strong> {invoice_amount}</p>
                 <p><strong>Cash Advance:</strong> {cash_advance}</p>
                 <p><strong>Narration:</strong> {narration}</p>
+                <P><strong>Refund reimbursement: </strong> {refund_reimbursement}</p>
                 <p><strong>Less What:</strong> {less_what}</p>
                 <p><strong>Amount:</strong> {amount}</p>
             </div>
 
-
-                <div style="text-align: center; margin: 20px 0;">
-                    <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
-                </div>
+            <div style="text-align: center; margin: 20px 0;">
+                <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
             </div>
-            <!-- Footer -->
-            <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777; position: absolute-bottom;">
-                <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
-            </footer>
         </div>
+        <!-- Footer -->
+        <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777; position: absolute-bottom;">
+            <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
+        </footer>
     </body>
     </html>
     """
 
-    # Create the email
+    # Create the email message
     msg = Message(
         subject="New Request Notification",
-            sender="emmanatesynergy@gmail.com",
-            recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]  # Replace with actual recipient
+        sender="emmanatesynergy@gmail.com",
+        recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]  # Replace with actual recipient
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
     mail.send(msg)
 
     return {"message": "Email sent successfully!"}, 200
-
-if __name__ == '__main__':
-    print(app.url_map)
-    app.run(debug=True)
