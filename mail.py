@@ -3,17 +3,8 @@ from flask import Flask, jsonify, request  # Import jsonify for JSON responses
 from flask_mail import Mail, Message
 import logging
 from logging import StreamHandler
-from opexcapexretirement import opex_blueprint
-from pettycashadvance import pettycash_blueprint
-from pettycashretirement import pettycash_retirement_blueprint
-from stationeryrequest import stationery_blueprint
 
 app = Flask(__name__)
-
-app.register_blueprint(app.routes, url_prefix='/opexcapexretirement')
-app.register_blueprint(app.routes, url_prefix='/pettycashadvance')
-app.register_blueprint(app.routes, url_prefix='/pettycashretirement')
-app.register_blueprint(app.routes, url_prefix='/stationeryrequest')
 
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
