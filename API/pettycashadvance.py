@@ -81,4 +81,5 @@ def send_email():
     return {"message": "Email sent successfully!"}, 200
 
 if __name__ == '__main__':
+    print(app.url_map)
     app.run(debug=True)
