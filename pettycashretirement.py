@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request  # Import jsonify for JSON responses
+from flask import Flask, jsonify, request, Blueprint  # Import jsonify for JSON responses
 from flask_mail import Mail, Message
 import logging
 from logging import StreamHandler
