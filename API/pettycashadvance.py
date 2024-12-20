@@ -17,7 +17,7 @@ app.config['MAIL_TIMEOUT'] = 10
 
 mail = Mail(app)
 
-@app.route("/cashadvance", methods=["POST"])
+@app.route("/pettycashadvance", methods=["POST"])
 def send_email():
     # Get branch name from POST request
     data = request.get_json()  # Assumes the client sends JSON data
@@ -26,11 +26,8 @@ def send_email():
     department = data.get("department", "Unknown Department")
     payee_name = data.get("payee_name", "Unknown Payee")
     payee_account = data.get("payee_account", "Unknown Account")
-    invoice_amount = data.get("invoice_amount", "N/A")
-    cash_advance = data.get("cash_advance", "N/A")
-    narration = data.get("narration", "N/A")
-    less_what = data.get("less_what", "N/A")
-    amount = data.get("amount", "N/A")
+    description = data.get("description", "N/A")
+    total_amount = data.get("total_amount", "N/A")
 
     # Define the HTML content with dynamic branch name
     html_content = f"""
@@ -53,11 +50,8 @@ def send_email():
                 <p><strong>Department:</strong> {department}</p>
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
-                <p><strong>Invoice Amount:</strong> {invoice_amount}</p>
-                <p><strong>Cash Advance:</strong> {cash_advance}</p>
-                <p><strong>Narration:</strong> {narration}</p>
-                <p><strong>Less What:</strong> {less_what}</p>
-                <p><strong>Amount:</strong> {amount}</p>
+                <p><strong>Description:</strong> {description}</p>
+                <p><strong>Amount:</strong> {total_amount}</p>
             </div>
 
 

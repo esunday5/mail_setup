@@ -17,7 +17,7 @@ app.config['MAIL_TIMEOUT'] = 10
 
 mail = Mail(app)
 
-@app.route("/cashadvance", methods=["POST"])
+@app.route("/opexcapexretirement", methods=["POST"])
 def send_email():
     # Get branch name from POST request
     data = request.get_json()  # Assumes the client sends JSON data
@@ -29,6 +29,7 @@ def send_email():
     invoice_amount = data.get("invoice_amount", "N/A")
     cash_advance = data.get("cash_advance", "N/A")
     narration = data.get("narration", "N/A")
+    refund_reimbursement = data.get("refund_reimbursement", "N/A")
     less_what = data.get("less_what", "N/A")
     amount = data.get("amount", "N/A")
 
@@ -56,6 +57,7 @@ def send_email():
                 <p><strong>Invoice Amount:</strong> {invoice_amount}</p>
                 <p><strong>Cash Advance:</strong> {cash_advance}</p>
                 <p><strong>Narration:</strong> {narration}</p>
+                <P><strong>Refund reimbursement: </strong> {refund_reimbursement}</p>
                 <p><strong>Less What:</strong> {less_what}</p>
                 <p><strong>Amount:</strong> {amount}</p>
             </div>
