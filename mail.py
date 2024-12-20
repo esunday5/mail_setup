@@ -4,8 +4,12 @@ from flask_mail import Mail, Message
 import logging
 from logging import StreamHandler
 from flask import Blueprint
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+# Enable CORS for the app
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
