@@ -2,8 +2,12 @@ import os
 from flask import Blueprint, request
 from flask_mail import Message
 from mail import mail  # Import mail from mail.py
+from flask_cors import CORS
 
 opexcapexretirement_blueprint = Blueprint('opexcapexretirement', __name__)
+
+# Enable CORS for the app
+CORS(mail, resources={r"/*": {"origins": "*"}})
 
 # OPEX/CAPEX Retirement route
 @opexcapexretirement_blueprint.route("/opexcapexretirement", methods=["POST"])

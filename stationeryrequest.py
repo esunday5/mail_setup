@@ -2,8 +2,12 @@ import os
 from flask import Blueprint, request
 from flask_mail import Message
 from mail import mail  # Import the 'mail' object from the mail module
+from flask_cors import CORS
 
 stationeryrequest_blueprint = Blueprint('stationeryrequest', __name__)
+
+# Enable CORS for the app
+CORS(mail, resources={r"/*": {"origins": "*"}})
 
 # Stationery request route
 @stationeryrequest_blueprint.route("/stationeryrequest", methods=["POST"])
