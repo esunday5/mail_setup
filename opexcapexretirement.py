@@ -7,7 +7,7 @@ from flask_cors import CORS
 opexcapexretirement_blueprint = Blueprint('opexcapexretirement', __name__)
 
 # Enable CORS for the app
-CORS(mail, resources={r"/*": {"origins": "*"}})
+CORS(opexcapexretirement_blueprint, resources={r"/*": {"origins": "*"}})
 
 # OPEX/CAPEX Retirement route
 @opexcapexretirement_blueprint.route("/opexcapexretirement", methods=["POST"])

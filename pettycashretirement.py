@@ -7,7 +7,7 @@ from flask_cors import CORS
 pettycashretirement_blueprint = Blueprint('pettycashretirement', __name__)
 
 # Enable CORS for the app
-CORS(mail, resources={r"/*": {"origins": "*"}})
+CORS(pettycashretirement_blueprint, resources={r"/*": {"origins": "*"}})
 
 # Petty Cash Retirement route
 @pettycashretirement_blueprint.route("/pettycashretirement", methods=["POST"])
