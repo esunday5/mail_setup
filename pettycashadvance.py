@@ -25,7 +25,7 @@ def send_email():
 
     # Convert items list to HTML without bullet points
     items_html = "".join(
-        f"<p><strong>Item:</strong> {item['item']} - <strong>Description:</strong> {item['description']}</p>"
+        f"<p style='color: black;'><strong>Item:</strong> {item['item']} - <strong>Description:</strong> {item['description']}</p>"
         for item in items
     )
 
@@ -46,12 +46,12 @@ def send_email():
             <p style="font-size: 22px; font-weight: bold; color: #388e3c; text-align: center;">You have a new request for {branch_name}!</p>
 
             <div style="padding: 20px; font-size: 14px; text-align: center;">
-                <p><strong>Request Type:</strong> {request_type}</p>
-                <p><strong>Department:</strong> {department}</p>
-                <p><strong>Payee Name:</strong> {payee_name}</p>
-                <p><strong>Payee Account:</strong> {payee_account}</p>
+                <p style="color: black;"><strong>Request Type:</strong> {request_type}</p>
+                <p style="color: black;"><strong>Department:</strong> {department}</p>
+                <p style="color: black;"><strong>Payee Name:</strong> {payee_name}</p>
+                <p style="color: black;"><strong>Payee Account:</strong> {payee_account}</p>
                 {items_html}
-                <p><strong>Amount:</strong> {total_amount}</p>
+                <p style="color: black;"><strong>Amount:</strong> {total_amount}</p>
             </div>
 
                 <div style="text-align: center; margin: 20px 0;">
