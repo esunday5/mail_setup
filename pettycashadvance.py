@@ -14,7 +14,7 @@ CORS(pettycashadvance_blueprint, resources={r"/*": {"origins": "*"}})
 def send_email():
     data = request.get_json()
 
-    # Get values from the request body
+    # Extract key data
     branch_name = data.get("branch_name", "Unknown Branch")
     request_type = data.get("request_type", "Unknown Type")
     department = data.get("department", "Unknown Department")
@@ -25,19 +25,22 @@ def send_email():
     # Generate a structured list of items and descriptions
     items = []
     for key, value in data.items():
-        if key.startswith("Item "):  # Match item keys like 'Item 1', 'Item 2'
-            item_number = key.split(" ")[1]  # Extract the item number
-            description_key = f"Description {item_number}"  # Build the description key
+        if key.startswith("Item "):  # Find all keys starting with "Item"
+            item_number = key.split(" ")[1]  # Extract item number
+            description_key = f"Description {item_number}"  # Build description key
             description = data.get(description_key, "No description provided")
             items.append({"item_name": value, "description": description})
 
-    # Format the items into HTML for the email body
+    # Build HTML content for items
     item_list_html = ""
-    for index, item in enumerate(items, start=1):
-        item_list_html += f"""
-        <p><strong>Item {index}:</strong> {item['item_name']}<br>
-        <strong>Description {index}:</strong> {item['description']}</p>
-        """
+    if items:
+        for index, item in enumerate(items, start=1):
+            item_list_html += f"""
+            <p><strong>Item {index}:</strong> {item['item_name']}<br>
+            <strong>Description {index}:</strong> {item['description']}</p>
+            """
+    else:
+        item_list_html = "<p>No items provided.</p>"
 
     # HTML content for the email
     html_content = f"""
@@ -69,8 +72,7 @@ def send_email():
                 <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
             </div>
         </div>
-        <!-- Footer -->
-        <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777; position: absolute-bottom;">
+        <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777;">
             <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
         </footer>
     </body>
@@ -81,10 +83,11 @@ def send_email():
     msg = Message(
         subject="New Request Notification",
         sender="emmanatesynergy@gmail.com",
-        recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]  # Change recipients as necessary
+        recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
     mail.send(msg)
 
     return {"message": "Email sent successfully!"}, 200
+
