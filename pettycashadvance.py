@@ -14,7 +14,7 @@ CORS(pettycashadvance_blueprint, resources={r"/*": {"origins": "*"}})
 def send_email():
     data = request.get_json()
 
-    # Extract key data
+    # Extracting required data
     branch_name = data.get("branch_name", "Unknown Branch")
     request_type = data.get("request_type", "Unknown Type")
     department = data.get("department", "Unknown Department")
@@ -22,28 +22,25 @@ def send_email():
     payee_account = data.get("payee_account", "Unknown Account")
     total_amount = data.get("total_amount", "N/A")
 
-    # Generate a structured list of items and descriptions
-    items = []
+    # Processing items and descriptions dynamically
+    items_html = ""
     item_number = 1
 
+    # Loop to dynamically capture all items and descriptions
     while f"Item {item_number}" in data:
         item_name = data.get(f"Item {item_number}", "Unknown Item")
         description = data.get(f"Description {item_number}", "No description provided")
-        items.append({"item_name": item_name, "description": description})
-        item_number += 1  # Move to the next item
+        items_html += f"""
+        <p><strong>Item {item_number}:</strong> {item_name}<br>
+        <strong>Description {item_number}:</strong> {description}</p>
+        """
+        item_number += 1
 
-    # Build HTML content for items
-    item_list_html = ""
-    if items:
-        for index, item in enumerate(items, start=1):
-            item_list_html += f"""
-            <p><strong>Item {index}:</strong> {item['item_name']}<br>
-            <strong>Description {index}:</strong> {item['description']}</p>
-            """
-    else:
-        item_list_html = "<p>No items provided.</p>"
+    # Fallback if no items exist
+    if not items_html:
+        items_html = "<p>No items provided.</p>"
 
-    # HTML content for the email
+    # Email HTML content
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -65,7 +62,7 @@ def send_email():
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
                 <p><strong>Items:</strong></p>
-                {item_list_html}
+                {items_html}
                 <p><strong>Total Amount:</strong> {total_amount}</p>
             </div>
 
@@ -80,7 +77,7 @@ def send_email():
     </html>
     """
 
-    # Create the email message
+    # Creating and sending the email
     msg = Message(
         subject="New Request Notification",
         sender="emmanatesynergy@gmail.com",
