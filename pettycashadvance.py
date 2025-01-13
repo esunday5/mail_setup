@@ -20,23 +20,14 @@ def send_email():
     department = data.get("department", "Unknown Department")
     payee_name = data.get("payee_name", "Unknown Payee")
     payee_account = data.get("payee_account", "Unknown Account")
+    items = data.get("items", [])
+    description = data.get("description", "N/A")
     total_amount = data.get("total_amount", "N/A")
 
-    # Initialize items and descriptions dynamically
-    items_text = ""
-    item_number = 1
+    # Convert items list to HTML
+    items_html = "".join(f"<li>{item}</li>" for item in items)
 
-    while f"Item {item_number}" in data:
-        item_name = data.get(f"Item {item_number}", "Unknown Item")
-        description = data.get(f"Description {item_number}", "No description provided")
-        items_text += f"\nItem {item_number}: {item_name}\nDescription: {description}\n"
-        item_number += 1
-
-    # Fallback if no items exist
-    if not items_text:
-        items_text = "No items provided."
-
-    # HTML content for the email (items and descriptions first, then total amount)
+    # HTML content for the email
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -57,39 +48,22 @@ def send_email():
                 <p><strong>Department:</strong> {department}</p>
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
-
-                <p><strong>Items and Descriptions:</strong></p>
-                <pre>{items_text}</pre>
-
-                <p><strong>Total Amount:</strong> {total_amount}</p>
+                <P><strong>Items:</strong><ul>{items_html}</ul></p>
+                <p><strong>Description:</strong> {description}</p>
+                <p><strong>Amount:</strong> {total_amount}</p>
             </div>
 
-            <div style="text-align: center; margin: 20px 0;">
-                <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
+                </div>
             </div>
+            <!-- Footer -->
+            <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777; position: absolute-bottom;">
+                <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
+            </footer>
         </div>
-
-        <!-- Footer -->
-        <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777;">
-            <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
-        </footer>
     </body>
     </html>
-    """
-
-    # Plain text fallback (items and descriptions first, then total amount)
-    message_body = f"""
-    You have a new request for {branch_name}!
-
-    Request Type: {request_type}
-    Department: {department}
-    Payee Name: {payee_name}
-    Payee Account: {payee_account}
-    
-    Items and Descriptions:
-    {items_text}
-
-    Total Amount: {total_amount}
     """
 
     # Create the email message
@@ -98,7 +72,7 @@ def send_email():
         sender="emmanatesynergy@gmail.com",
         recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]  # Change recipients as necessary
     )
-    msg.body = message_body  # Plain text fallback
+    msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
     mail.send(msg)
 
