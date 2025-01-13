@@ -24,8 +24,11 @@ def send_email():
     description = data.get("description", "N/A")
     total_amount = data.get("total_amount", "N/A")
 
-    # Convert items list to HTML
-    items_html = "".join(f"<li>{item}</li>" for item in items)
+    # Convert items list to HTML with item descriptions
+    items_html = "".join(
+        f"<li><strong>Item:</strong> {item['item']} - <strong>Description:</strong> {item['description']}</li>"
+        for item in items
+    )
 
     # HTML content for the email
     html_content = f"""
