@@ -14,7 +14,7 @@ CORS(pettycashadvance_blueprint, resources={r"/*": {"origins": "*"}})
 def send_email():
     data = request.get_json()
 
-    # Extracting required data
+    # Get values from the request body
     branch_name = data.get("branch_name", "Unknown Branch")
     request_type = data.get("request_type", "Unknown Type")
     department = data.get("department", "Unknown Department")
@@ -22,7 +22,7 @@ def send_email():
     payee_account = data.get("payee_account", "Unknown Account")
     total_amount = data.get("total_amount", "N/A")
 
-    # Processing items and descriptions dynamically
+    # Initialize items and descriptions dynamically
     items_text = ""
     item_number = 1
 
@@ -43,24 +43,22 @@ def send_email():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Petty Cash Advance Request</title>
+        <title>Email Notification</title>
     </head>
     <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #555;">
         <div style="max-width: 600px; margin: auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden;">
             <div style="background-color: #37a04e; padding: 20px; text-align: center;">
                 <img src="https://ibank.mybankone.com/tenants/101/img/logo.png" alt="Logo" style="max-width: 150px;">
             </div>
-            <p style="font-size: 22px; font-weight: bold; color: #388e3c; text-align: center;">
-                You have a new petty cash advance request for {branch_name}!
-            </p>
+            <p style="font-size: 22px; font-weight: bold; color: #388e3c; text-align: center;">You have a new request for {branch_name}!</p>
 
-            <div style="padding: 20px; font-size: 14px;">
+            <div style="padding: 20px; font-size: 14px; text-align: center;">
                 <p><strong>Request Type:</strong> {request_type}</p>
                 <p><strong>Department:</strong> {department}</p>
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
 
-                <p><strong>Items:</strong></p>
+                <p><strong>Items and Descriptions:</strong></p>
                 <pre>{items_text}</pre>
 
                 <p><strong>Total Amount:</strong> {total_amount}</p>
@@ -81,26 +79,26 @@ def send_email():
 
     # Plain text fallback (items and descriptions first, then total amount)
     message_body = f"""
-    You have a new petty cash advance request for {branch_name}!
+    You have a new request for {branch_name}!
 
     Request Type: {request_type}
     Department: {department}
     Payee Name: {payee_name}
     Payee Account: {payee_account}
     
-    Items:
+    Items and Descriptions:
     {items_text}
 
     Total Amount: {total_amount}
     """
 
-    # Create and send the email
+    # Create the email message
     msg = Message(
-        subject="New Petty Cash Advance Request",
+        subject="New Request Notification",
         sender="emmanatesynergy@gmail.com",
-        recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]
+        recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]  # Change recipients as necessary
     )
-    msg.body = message_body  # Plain text content
+    msg.body = message_body  # Plain text fallback
     msg.html = html_content  # HTML content
     mail.send(msg)
 
