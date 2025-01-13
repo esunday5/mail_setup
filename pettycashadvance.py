@@ -21,12 +21,11 @@ def send_email():
     payee_name = data.get("payee_name", "Unknown Payee")
     payee_account = data.get("payee_account", "Unknown Account")
     items = data.get("items", [])
-    description = data.get("description", "N/A")
     total_amount = data.get("total_amount", "N/A")
 
-    # Convert items list to HTML with item descriptions
+    # Convert items list to HTML without bullet points
     items_html = "".join(
-        f"<li><strong>Item:</strong> {item['item']} - <strong>Description:</strong> {item['description']}</li>"
+        f"<p><strong>Item:</strong> {item['item']} - <strong>Description:</strong> {item['description']}</p>"
         for item in items
     )
 
@@ -51,8 +50,7 @@ def send_email():
                 <p><strong>Department:</strong> {department}</p>
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
-                <P><strong>Items:</strong><ul>{items_html}</ul></p>
-                <p><strong>Description:</strong> {description}</p>
+                {items_html}
                 <p><strong>Amount:</strong> {total_amount}</p>
             </div>
 
