@@ -26,13 +26,13 @@ def send_email():
     items_html = ""
     item_number = 1
 
-    # Loop to dynamically capture all items and descriptions
+    # Loop through items and descriptions
     while f"Item {item_number}" in data:
         item_name = data.get(f"Item {item_number}", "Unknown Item")
         description = data.get(f"Description {item_number}", "No description provided")
         items_html += f"""
         <p><strong>Item {item_number}:</strong> {item_name}<br>
-        <strong>Description {item_number}:</strong> {description}</p>
+        <strong>Description:</strong> {description}</p>
         """
         item_number += 1
 
@@ -77,7 +77,7 @@ def send_email():
     </html>
     """
 
-    # Creating and sending the email
+    # Create the email message
     msg = Message(
         subject="New Request Notification",
         sender="emmanatesynergy@gmail.com",
@@ -88,5 +88,3 @@ def send_email():
     mail.send(msg)
 
     return {"message": "Email sent successfully!"}, 200
-
-
