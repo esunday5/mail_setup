@@ -23,30 +23,20 @@ def send_email():
     total_amount = data.get("total_amount", "N/A")
 
     # Processing items and descriptions dynamically
-    items_html = ""
+    items_text = ""
     item_number = 1
 
     while f"Item {item_number}" in data:
         item_name = data.get(f"Item {item_number}", "Unknown Item")
         description = data.get(f"Description {item_number}", "No description provided")
-        items_html += f"""
-        <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;">Item {item_number}</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">{item_name}</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">{description}</td>
-        </tr>
-        """
+        items_text += f"\nItem {item_number}: {item_name}\nDescription: {description}\n"
         item_number += 1
 
     # Fallback if no items exist
-    if not items_html:
-        items_html = f"""
-        <tr>
-            <td colspan="3" style="padding: 8px; border: 1px solid #ddd; text-align: center;">No items provided.</td>
-        </tr>
-        """
+    if not items_text:
+        items_text = "No items provided."
 
-    # HTML content for the email
+    # HTML content for the email (items and descriptions first, then total amount)
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -70,18 +60,8 @@ def send_email():
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
 
-                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                    <thead>
-                        <tr style="background-color: #f9f9f9;">
-                            <th style="padding: 8px; border: 1px solid #ddd;">Item</th>
-                            <th style="padding: 8px; border: 1px solid #ddd;">Name</th>
-                            <th style="padding: 8px; border: 1px solid #ddd;">Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items_html}
-                    </tbody>
-                </table>
+                <p><strong>Items:</strong></p>
+                <pre>{items_text}</pre>
 
                 <p><strong>Total Amount:</strong> {total_amount}</p>
             </div>
@@ -99,13 +79,7 @@ def send_email():
     </html>
     """
 
-    # Plain text fallback
-    items_text = ""
-    for i in range(1, item_number):
-        item_name = data.get(f"Item {i}", "Unknown Item")
-        description = data.get(f"Description {i}", "No description provided")
-        items_text += f"\nItem {i}: {item_name}\nDescription: {description}\n"
-
+    # Plain text fallback (items and descriptions first, then total amount)
     message_body = f"""
     You have a new petty cash advance request for {branch_name}!
 
@@ -113,8 +87,10 @@ def send_email():
     Department: {department}
     Payee Name: {payee_name}
     Payee Account: {payee_account}
+    
     Items:
     {items_text}
+
     Total Amount: {total_amount}
     """
 
