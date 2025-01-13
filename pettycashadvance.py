@@ -20,9 +20,15 @@ def send_email():
     department = data.get("department", "Unknown Department")
     payee_name = data.get("payee_name", "Unknown Payee")
     payee_account = data.get("payee_account", "Unknown Account")
-    items = data.get("items", "N/A")
-    description = data.get("description", "N/A")
+    items = data.get("items", [])
     total_amount = data.get("total_amount", "N/A")
+
+    # Create item list with description
+    item_list = ""
+    for item in items:
+        item_name = item.get("item_name", "Unknown Item")
+        item_description = item.get("description", "No description provided")
+        item_list += f"<p><strong>Item:</strong> {item_name} <br><strong>Description:</strong> {item_description}</p>"
 
     # HTML content for the email
     html_content = f"""
@@ -45,9 +51,9 @@ def send_email():
                 <p><strong>Department:</strong> {department}</p>
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
-                <P><strong>Items:</strong> {items}</p>
-                <p><strong>Description:</strong> {description}</p>
-                <p><strong>Amount:</strong> {total_amount}</p>
+                <p><strong>Items:</strong></p>
+                {item_list}
+                <p><strong>Total Amount:</strong> {total_amount}</p>
             </div>
 
                 <div style="text-align: center; margin: 20px 0;">
