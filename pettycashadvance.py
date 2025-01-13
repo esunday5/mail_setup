@@ -24,12 +24,13 @@ def send_email():
 
     # Generate a structured list of items and descriptions
     items = []
-    for key, value in data.items():
-        if key.startswith("Item "):  # Find all keys starting with "Item"
-            item_number = key.split(" ")[1]  # Extract item number
-            description_key = f"Description {item_number}"  # Build description key
-            description = data.get(description_key, "No description provided")
-            items.append({"item_name": value, "description": description})
+    item_number = 1
+
+    while f"Item {item_number}" in data:
+        item_name = data.get(f"Item {item_number}", "Unknown Item")
+        description = data.get(f"Description {item_number}", "No description provided")
+        items.append({"item_name": item_name, "description": description})
+        item_number += 1  # Move to the next item
 
     # Build HTML content for items
     item_list_html = ""
@@ -90,4 +91,5 @@ def send_email():
     mail.send(msg)
 
     return {"message": "Email sent successfully!"}, 200
+
 
