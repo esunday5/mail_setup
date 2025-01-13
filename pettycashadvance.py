@@ -23,7 +23,7 @@ def send_email():
     items = data.get("items", [])
     total_amount = data.get("total_amount", "N/A")
 
-    # Create item list with description
+    # Ensure items are properly iterated and formatted
     item_list = ""
     for item in items:
         item_name = item.get("item_name", "Unknown Item")
