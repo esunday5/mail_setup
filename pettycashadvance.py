@@ -25,10 +25,13 @@ def send_email():
 
     # Ensure items are properly iterated and formatted
     item_list = ""
-    for item in items:
-        item_name = item.get("item_name", "Unknown Item")
+    for index, item in enumerate(items, start=1):
+        item_name = item.get("item_name", f"Unknown Item {index}")
         item_description = item.get("description", "No description provided")
-        item_list += f"<p><strong>Item:</strong> {item_name} <br><strong>Description:</strong> {item_description}</p>"
+        item_list += f"""
+        <p><strong>Item {index}:</strong> {item_name} <br>
+        <strong>Description:</strong> {item_description}</p>
+        """
 
     # HTML content for the email
     html_content = f"""
@@ -56,15 +59,14 @@ def send_email():
                 <p><strong>Total Amount:</strong> {total_amount}</p>
             </div>
 
-                <div style="text-align: center; margin: 20px 0;">
-                    <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
-                </div>
+            <div style="text-align: center; margin: 20px 0;">
+                <a href="#" style="text-decoration: none; background-color: #337036; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px;">Click to review request</a>
             </div>
-            <!-- Footer -->
-            <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777; position: absolute-bottom;">
-                <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
-            </footer>
         </div>
+        <!-- Footer -->
+        <footer style="padding: 20px; text-align: center; font-size: 13px; color: #777; position: absolute-bottom;">
+            <p style="margin: 0;">Copyright &copy; Ekondo Staff Portal 2024</p>
+        </footer>
     </body>
     </html>
     """
