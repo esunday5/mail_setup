@@ -20,17 +20,23 @@ def send_email():
     department = data.get("department", "Unknown Department")
     payee_name = data.get("payee_name", "Unknown Payee")
     payee_account = data.get("payee_account", "Unknown Account")
-    items = data.get("items", [])
     total_amount = data.get("total_amount", "N/A")
 
-    # Ensure items are properly iterated and formatted
-    item_list = ""
+    # Generate a structured list of items and descriptions
+    items = []
+    for key, value in data.items():
+        if key.startswith("Item "):  # Match item keys like 'Item 1', 'Item 2'
+            item_number = key.split(" ")[1]  # Extract the item number
+            description_key = f"Description {item_number}"  # Build the description key
+            description = data.get(description_key, "No description provided")
+            items.append({"item_name": value, "description": description})
+
+    # Format the items into HTML for the email body
+    item_list_html = ""
     for index, item in enumerate(items, start=1):
-        item_name = item.get("item_name", f"Unknown Item {index}")
-        item_description = item.get("description", "No description provided")
-        item_list += f"""
-        <p><strong>Item {index}:</strong> {item_name} <br>
-        <strong>Description:</strong> {item_description}</p>
+        item_list_html += f"""
+        <p><strong>Item {index}:</strong> {item['item_name']}<br>
+        <strong>Description {index}:</strong> {item['description']}</p>
         """
 
     # HTML content for the email
@@ -55,7 +61,7 @@ def send_email():
                 <p><strong>Payee Name:</strong> {payee_name}</p>
                 <p><strong>Payee Account:</strong> {payee_account}</p>
                 <p><strong>Items:</strong></p>
-                {item_list}
+                {item_list_html}
                 <p><strong>Total Amount:</strong> {total_amount}</p>
             </div>
 
