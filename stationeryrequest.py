@@ -20,6 +20,7 @@ def send_email():
     department = data.get("department", "Unknown Department")
     description = data.get("description", "N/A")
     quantity = data.get("quantity", "N/A")
+    
     items = data.get("items", "N/A")
 
     # HTML content for the email

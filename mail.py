@@ -32,6 +32,20 @@ app.register_blueprint(pettycashretirement_blueprint)
 app.register_blueprint(opexcapexretirement_blueprint)
 app.register_blueprint(stationeryrequest_blueprint)
 
+from notifications import (
+    officer_blueprint,
+    supervisor_blueprint,
+    reviewer_blueprint,
+    approver_blueprint,
+    account_officer_blueprint,
+)
+
+app.register_blueprint(officer_blueprint)
+app.register_blueprint(supervisor_blueprint)
+app.register_blueprint(reviewer_blueprint)
+app.register_blueprint(approver_blueprint)
+app.register_blueprint(account_officer_blueprint)
+
 
 @app.route("/cashadvance", methods=["POST"])
 def send_email():
