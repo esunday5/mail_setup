@@ -9,6 +9,6 @@ def notify_supervisor():
     branch_name = data.get("branch_name", "Unknown Branch")
     request_type = data.get("request_type", "Unknown Type")
     content = data.get("content", "No content provided.")
-    recipients = ["supervisor@example.com"]  # Replace with supervisor email(s)
+    recipients = ["ubong.wilson@ekondomfbank.com"]  # Replace with supervisor email(s)
 
     return jsonify(send_email(recipients, branch_name, request_type, content))

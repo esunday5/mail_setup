@@ -9,6 +9,6 @@ def notify_approver():
     branch_name = data.get("branch_name", "Unknown Branch")
     request_type = data.get("request_type", "Unknown Type")
     content = data.get("content", "No content provided.")
-    recipients = ["approver@example.com"]  # Replace with approver email(s)
+    recipients = ["ekuere.akpan@ekondomfbank.com"]  # Replace with approver email(s)
 
     return jsonify(send_email(recipients, branch_name, request_type, content))

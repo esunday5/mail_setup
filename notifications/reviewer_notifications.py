@@ -9,6 +9,6 @@ def notify_reviewer():
     branch_name = data.get("branch_name", "Unknown Branch")
     request_type = data.get("request_type", "Unknown Type")
     content = data.get("content", "No content provided.")
-    recipients = ["reviewer@example.com"]  # Replace with reviewer email(s)
+    recipients = ["henry.etim@ekondomfbank.com"]  # Replace with reviewer email(s)
 
     return jsonify(send_email(recipients, branch_name, request_type, content))
