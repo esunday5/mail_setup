@@ -131,7 +131,7 @@ def send_email():
     msg = Message(
         subject="New Request Notification",
             sender="emmanatesynergy@gmail.com",
-            recipients=[recipient_email]
+            recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
