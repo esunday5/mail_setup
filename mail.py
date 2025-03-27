@@ -61,7 +61,7 @@ def send_email():
     narration = data.get("narration", "N/A")
     less_what = data.get("less_what", "N/A")
     amount = data.get("amount", "N/A")
-    recipient_email = data.get("recipient_email", "no-reply@ekondomfbank.com")
+    recipient_email = data.get("recipient_email")
 
     # Define the HTML content with dynamic branch name
     html_content = f"""
@@ -109,7 +109,7 @@ def send_email():
     # Create the email
     msg = Message(
         subject="New Request Notification",
-            sender="no-reply@ekondomfbank.com",
+            sender="emmanatesynergy@gmail.com",
             recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]  # Replace with actual recipient
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
