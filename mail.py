@@ -47,12 +47,18 @@ app.register_blueprint(approver_blueprint)
 app.register_blueprint(account_officer_blueprint)
 
 
+def is_valid_email(email):
+    email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    return re.match(email_regex, email)
+
 @app.route("/cashadvance", methods=["POST"])
 def send_email():
-    # Get branch name from POST request
-    data = request.get_json()  # Assumes the client sends JSON data
-    branch_name = data.get("branch_name", "Unknown Branch")  # Default to "Unknown Branch" if missing
-    request_type = data.get ("request_type", "Unknown Type")
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No JSON data received"}, 400)
+
+    branch_name = data.get("branch_name", "Unknown Branch")
+    request_type = data.get("request_type", "Unknown Type")
     department = data.get("department", "Unknown Department")
     payee_name = data.get("payee_name", "Unknown Payee")
     payee_account = data.get("payee_account", "Unknown Account")
@@ -63,17 +69,19 @@ def send_email():
     amount = data.get("amount", "N/A")
     recipient_email = data.get("recipient_email")
 
-        # Ensure recipient_email exists
     if not recipient_email:
-        return jsonify({"error": "Recipient email is required"}), 400
+        return jsonify({"error": "Recipient email is required"}, 400)
 
-    # Allow multiple emails if provided as a list
     if isinstance(recipient_email, str):
-        recipient_emails = [recipient_email]  # Convert single email to list
+        recipient_emails = [recipient_email]
     elif isinstance(recipient_email, list):
-        recipient_emails = recipient_email  # Use the provided list
+        recipient_emails = recipient_email
     else:
-        return jsonify({"error": "Invalid email format"}), 400
+        return jsonify({"error": "Invalid email format"}, 400)
+
+    for email in recipient_emails:
+        if not is_valid_email(email):
+            return jsonify({"error": f"Invalid email: {email}"}, 400)
 
     # Define the HTML content with dynamic branch name
     html_content = f"""
