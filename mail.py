@@ -68,19 +68,19 @@ def send_email():
     narration = data.get("narration", "N/A")
     less_what = data.get("less_what", "N/A")
     amount = data.get("amount", "N/A")
-    recipient_email = data.get("recipient_email")
+    recipient_email = data.get("recipientEmail")
 
-    if not recipient_email:
+    if not recipientEmail:
         return jsonify({"error": "Recipient email is required"}, 400)
 
-    if isinstance(recipient_email, str):
-        recipient_emails = [recipient_email]
+    if isinstance(recipientEmail, str):
+        recipient_emails = [recipientEmail]
     elif isinstance(recipient_email, list):
-        recipient_emails = recipient_email
+        recipient_emails = recipientEmail
     else:
         return jsonify({"error": "Invalid email format"}, 400)
 
-    for email in recipient_emails:
+    for email in recipientEmails:
         if not is_valid_email(email):
             return jsonify({"error": f"Invalid email: {email}"}, 400)
 
@@ -110,7 +110,7 @@ def send_email():
                 <p><strong>Narration:</strong> {narration}</p>
                 <p><strong>Less What:</strong> {less_what}</p>
                 <p><strong>Amount:</strong> {amount}</p>
-                <p><strong>Recipient Email(s):</strong> {", ".join(recipient_email)}</p>
+                <p><strong>Recipient Email(s):</strong> {", ".join(recipientEmail)}</p>
             </div>
 
 
@@ -131,7 +131,7 @@ def send_email():
     msg = Message(
         subject="New Request Notification",
         sender="emmanatesynergy@gmail.com",
-        recipients=recipient_emails,  # Changed to recipient_emails
+        recipients=recipientEmails,  # Changed to recipient_emails
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
