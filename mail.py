@@ -68,7 +68,7 @@ def send_email():
     narration = data.get("narration", "N/A")
     less_what = data.get("less_what", "N/A")
     amount = data.get("amount", "N/A")
-    recipient_email = data.get("recipientEmail")
+    recipientEmail = data.get("recipientEmail")
 
     if not recipientEmail:
         return jsonify({"error": "Recipient email is required"}, 400)
