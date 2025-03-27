@@ -122,7 +122,7 @@ def send_email():
     msg = Message(
         subject="New Request Notification",
             sender="emmanatesynergy@gmail.com",
-            recipients=recipient_emails  # Send to dynamic recipient(s)
+            recipients=[recipient_email]
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
