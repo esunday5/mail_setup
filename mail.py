@@ -127,18 +127,25 @@ def send_email():
     </html>
     """
 
-    # Create the email
+ # Create the email
     msg = Message(
         subject="New Request Notification",
-            sender="emmanatesynergy@gmail.com",
-            recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]
+        sender="emmanatesynergy@gmail.com",
+        recipients=recipient_emails,  # Changed to recipient_emails
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
-    mail.send(msg)
+    try:
+        mail.send(msg)
+        return {"message": "Email sent successfully!"}, 200
+    except Exception as e:
+        logging.error(f"Error sending email: {e}")  # Add logging
+        return jsonify({"error": f"Failed to send email: {str(e)}"}, 500)
 
-    return {"message": "Email sent successfully!"}, 200
 
 if __name__ == '__main__':
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG)  # Add logging
     print(app.url_map)
     app.run(debug=True)
