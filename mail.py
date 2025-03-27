@@ -75,12 +75,12 @@ def send_email():
 
     if isinstance(recipientEmail, str):
         recipient_emails = [recipientEmail]
-    elif isinstance(recipient_email, list):
+    elif isinstance(recipientEmail, list):
         recipient_emails = recipientEmail
     else:
         return jsonify({"error": "Invalid email format"}, 400)
 
-    for email in recipientEmails:
+    for email in recipientEmail:
         if not is_valid_email(email):
             return jsonify({"error": f"Invalid email: {email}"}, 400)
 
@@ -131,7 +131,7 @@ def send_email():
     msg = Message(
         subject="New Request Notification",
         sender="emmanatesynergy@gmail.com",
-        recipients=recipientEmails,  # Changed to recipient_emails
+        recipients=recipientEmail,  # Changed to recipient_emails
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
