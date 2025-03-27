@@ -101,7 +101,7 @@ def send_email():
                 <p><strong>Narration:</strong> {narration}</p>
                 <p><strong>Less What:</strong> {less_what}</p>
                 <p><strong>Amount:</strong> {amount}</p>
-                <p><strong>Recipient Email(s):</strong> {", ".join(recipient_emails)}</p>
+                <p><strong>Recipient Email(s):</strong> {", ".join(recipient_email)}</p>
             </div>
 
 
