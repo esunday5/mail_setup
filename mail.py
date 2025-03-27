@@ -75,9 +75,9 @@ def send_email():
     else:
         return jsonify({"error": "Invalid email format"}, 400)
 
-    for email in recipientEmail:
-        if not is_valid_email(Email):
-            return jsonify({"error": f"Invalid email: {Email}"}, 400)
+    for email in recipient_emails:
+        if not is_valid_email(email):  # Corrected variable name
+            return jsonify({"error": f"Invalid email: {email}"}, 400)
 
     # Define the HTML content with dynamic branch name
     html_content = f"""
