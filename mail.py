@@ -63,6 +63,18 @@ def send_email():
     amount = data.get("amount", "N/A")
     recipient_email = data.get("recipient_email")
 
+        # Ensure recipient_email exists
+    if not recipient_email:
+        return jsonify({"error": "Recipient email is required"}), 400
+
+    # Allow multiple emails if provided as a list
+    if isinstance(recipient_email, str):
+        recipient_emails = [recipient_email]  # Convert single email to list
+    elif isinstance(recipient_email, list):
+        recipient_emails = recipient_email  # Use the provided list
+    else:
+        return jsonify({"error": "Invalid email format"}), 400
+
     # Define the HTML content with dynamic branch name
     html_content = f"""
     <!DOCTYPE html>
@@ -89,7 +101,7 @@ def send_email():
                 <p><strong>Narration:</strong> {narration}</p>
                 <p><strong>Less What:</strong> {less_what}</p>
                 <p><strong>Amount:</strong> {amount}</p>
-                <p><strong>Recipient Email:</strong> {recipient_email}</p>
+                <p><strong>Recipient Email(s):</strong> {", ".join(recipient_emails)}</p>
             </div>
 
 
@@ -110,7 +122,7 @@ def send_email():
     msg = Message(
         subject="New Request Notification",
             sender="emmanatesynergy@gmail.com",
-            recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com"]  # Replace with actual recipient
+            recipients=recipient_emails  # Send to dynamic recipient(s)
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
