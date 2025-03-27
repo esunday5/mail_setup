@@ -61,6 +61,7 @@ def send_email():
     narration = data.get("narration", "N/A")
     less_what = data.get("less_what", "N/A")
     amount = data.get("amount", "N/A")
+    recipient_email = data.get("recipient_email", "no-reply@ekondomfbank.com")
 
     # Define the HTML content with dynamic branch name
     html_content = f"""
@@ -88,6 +89,7 @@ def send_email():
                 <p><strong>Narration:</strong> {narration}</p>
                 <p><strong>Less What:</strong> {less_what}</p>
                 <p><strong>Amount:</strong> {amount}</p>
+                <p><strong>Recipient Email:</strong> {recipient_email}</p>
             </div>
 
 
