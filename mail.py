@@ -47,11 +47,6 @@ app.register_blueprint(approver_blueprint)
 app.register_blueprint(account_officer_blueprint)
 
 
-def is_valid_email(email):
-    email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    return re.match(email_regex, email)
-
-
 @app.route("/cashadvance", methods=["POST"])
 def send_email():
     data = request.get_json()
