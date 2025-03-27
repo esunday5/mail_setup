@@ -48,11 +48,6 @@ app.register_blueprint(approver_blueprint)
 app.register_blueprint(account_officer_blueprint)
 
 
-def is_valid_email(email):
-    email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    return re.match(email_regex, email)
-
-
 @app.route("/cashadvance", methods=["POST"])
 def send_email():
     data = request.get_json()
@@ -71,19 +66,6 @@ def send_email():
     amount = data.get("amount", "N/A")
     recipientEmail = data.get("recipientEmail")
 
-    if not recipientEmail:
-        return jsonify({"error": "Recipient email is required"}, 400)
-
-    if isinstance(recipientEmail, str):
-        recipient_emails = [recipientEmail]
-    elif isinstance(recipientEmail, list):
-        recipient_emails = recipientEmail
-    else:
-        return jsonify({"error": "Invalid email format"}, 400)
-
-    for email in recipient_emails:
-        if not is_valid_email(email):  # Corrected variable name
-            return jsonify({"error": f"Invalid email: {email}"}, 400)
 
     # Define the HTML content with dynamic branch name
     html_content = f"""
@@ -137,7 +119,7 @@ def send_email():
     msg = Message(
         subject="New Request Notification",
         sender="emmanatesynergy@gmail.com",
-        recipients=recipient_emails,  # Changed to recipient_emails
+        recipients=["henry.etim@ekondomfbank.com", "amanimeshiet@gmail.com", recipientEmail]
     )
     msg.body = f"You have a new request for {branch_name}."  # Plain text fallback
     msg.html = html_content  # HTML content
